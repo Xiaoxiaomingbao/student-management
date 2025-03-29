@@ -12,13 +12,12 @@ set(CMAKE_AUTORCC ON)  # 如果有 Qt 资源文件
 
 find_package(Qt5 COMPONENTS Core Gui Sql Widgets REQUIRED)
 
-add_executable(StudentManagement main.cpp
-        ui/MainWindow.cpp
-        ui/MainWindow.h
+file(GLOB SOURCES "ui/*.cpp" "ui/*.h")
+
+add_executable(StudentManagement
+        main.cpp
         Database.h
-        ui/ManagerStudentWindow.cpp
-        ui/ManagerStudentWindow.h
-        ui/StudentSqlTableModel.h)
+        ${SOURCES})
 
 target_link_libraries(StudentManagement
   Qt5::Core

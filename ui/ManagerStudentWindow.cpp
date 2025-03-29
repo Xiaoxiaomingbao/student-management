@@ -1,7 +1,4 @@
-#include "ManagerStudentWindow.h"
-#include "StudentSqlTableModel.h"
 #include <QSqlQuery>
-#include <QSqlRecord>
 #include <QSqlError>
 #include <QInputDialog>
 #include <QVBoxLayout>
@@ -9,6 +6,9 @@
 #include <QComboBox>
 #include <QHeaderView>
 #include <QDebug>
+
+#include "ManagerStudentWindow.h"
+#include "StudentSqlTableModel.h"
 
 ManagerStudentWindow::ManagerStudentWindow(QWidget *parent) : QWidget(parent) {
     setupUI();
@@ -108,11 +108,11 @@ void ManagerStudentWindow::addStudent() {
     }
 }
 
-void ManagerStudentWindow::deleteStudent() const {
-    const int row = tableView->currentIndex().row();
-    if (row < 0) return;
+void ManagerStudentWindow::deleteStudent() {
+    int studentId = 0;
+    studentId = QInputDialog::getInt(this, "删除学生", "输入学号:");
+    if (studentId == 0) return;
 
-    const int studentId = model->record(row).value("student_id").toInt();
     QSqlQuery query;
     query.prepare("DELETE FROM students WHERE student_id = :student_id");
     query.bindValue(":student_id", studentId);
@@ -125,17 +125,16 @@ void ManagerStudentWindow::deleteStudent() const {
 }
 
 void ManagerStudentWindow::updateStudent() {
-    const int row = tableView->currentIndex().row();
-    if (row < 0) return;
+    int studentId = 0;
+    studentId = QInputDialog::getInt(this, "更新学生", "输入学号:");
+    if (studentId == 0) return;
 
-    const int studentId = model->record(row).value("student_id").toInt();
-
-    const QString newGrade = QInputDialog::getText(this, "更新学生", "输入新班级:");
+    const QString newClassName = QInputDialog::getText(this, "更新学生", "输入新班级:");
 
     QSqlQuery query;
     query.prepare("UPDATE students SET class_name = :class_name WHERE student_id = :student_id");
     query.bindValue(":student_id", studentId);
-    query.bindValue(":class_name", newGrade);
+    query.bindValue(":class_name", newClassName);
 
     if (!query.exec()) {
         qDebug() << "Update student failed: " << query.lastError().text();

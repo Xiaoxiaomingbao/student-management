@@ -5,7 +5,6 @@
 #include <QPushButton>
 #include <QSqlTableModel>
 
-
 class ManagerStudentWindow final : public QWidget {
     Q_OBJECT
 
@@ -15,7 +14,7 @@ public:
 
 private slots:
     void addStudent();
-    void deleteStudent() const;
+    void deleteStudent();
     void updateStudent();
 
 private:
