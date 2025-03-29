@@ -17,7 +17,8 @@ add_executable(StudentManagement main.cpp
         ui/MainWindow.h
         Database.h
         ui/ManagerStudentWindow.cpp
-        ui/ManagerStudentWindow.h)
+        ui/ManagerStudentWindow.h
+        ui/StudentSqlTableModel.h)
 
 target_link_libraries(StudentManagement
   Qt5::Core

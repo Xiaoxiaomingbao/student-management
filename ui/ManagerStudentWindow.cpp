@@ -1,4 +1,5 @@
 #include "ManagerStudentWindow.h"
+#include "StudentSqlTableModel.h"
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
@@ -50,7 +51,7 @@ void ManagerStudentWindow::setupUI() {
 }
 
 void ManagerStudentWindow::setupDatabase() {
-    model = new QSqlTableModel(this);
+    model = new StudentSqlTableModel(this);
     model->setTable("students");
 
     // 设置表格的列名
