@@ -6,12 +6,18 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_PREFIX_PATH "D:/Download/Qt5.14.2/5.14.2/mingw73_64")
 
+set(CMAKE_AUTOMOC ON)  # 启用 Qt MOC 自动生成
+set(CMAKE_AUTOUIC ON)  # 如果有 UI 文件
+set(CMAKE_AUTORCC ON)  # 如果有 Qt 资源文件
+
 find_package(Qt5 COMPONENTS Core Gui Sql Widgets REQUIRED)
 
 add_executable(StudentManagement main.cpp
         ui/MainWindow.cpp
         ui/MainWindow.h
-        Database.h)
+        Database.h
+        ui/ManagerStudentWindow.cpp
+        ui/ManagerStudentWindow.h)
 
 target_link_libraries(StudentManagement
   Qt5::Core

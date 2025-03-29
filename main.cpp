@@ -2,6 +2,7 @@
 #include <QMessageBox>
 
 #include "Database.h"
+#include "ui/ManagerStudentWindow.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
@@ -18,6 +19,11 @@ int main(int argc, char *argv[]) {
             return -1;
         }
     }
+
+    ManagerStudentWindow window;
+    window.setWindowTitle("学生管理系统");
+    window.resize(600, 400);
+    window.show();
 
     return QApplication::exec();
 }
