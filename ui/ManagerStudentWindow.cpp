@@ -8,7 +8,7 @@
 #include <QDebug>
 
 #include "ManagerStudentWindow.h"
-#include "StudentSqlTableModel.h"
+#include "SexSqlTableModel.h"
 
 ManagerStudentWindow::ManagerStudentWindow(QWidget *parent) : QWidget(parent) {
     setupUI();
@@ -51,7 +51,7 @@ void ManagerStudentWindow::setupUI() {
 }
 
 void ManagerStudentWindow::setupDatabase() {
-    model = new StudentSqlTableModel(this);
+    model = new SexSqlTableModel(2, this);
     model->setTable("students");
 
     // 设置表格的列名
