@@ -5,6 +5,7 @@
 #include "ManagerCourseWindow.h"
 #include "ManagerStudentWindow.h"
 #include "ManagerTeacherWindow.h"
+#include "TeacherCourseWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     // 设置主窗口
@@ -41,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     stackedWidget->addWidget(new ManagerStudentWindow(this)); // 0
     stackedWidget->addWidget(new ManagerTeacherWindow(this)); // 1
     stackedWidget->addWidget(new ManagerCourseWindow(this)); // 2
+    stackedWidget->addWidget(new TeacherCourseWindow(this)); // 5
 
     // 布局
     const auto layout = new QHBoxLayout;
