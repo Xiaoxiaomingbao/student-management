@@ -21,7 +21,7 @@ private:
     QComboBox *deptBox;
     QComboBox *teacherBox;
 
-    QPushButton *commitButton{};
+    QPushButton *addButton{};
 
     int currentTeacherId;
 
@@ -29,8 +29,7 @@ private:
 
 private slots:
     void showGrades() const;
-    void showAverageAndRate() const;
-    void commitGrades();
+    void addGrade();
 
 };
 

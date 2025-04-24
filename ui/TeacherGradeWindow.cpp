@@ -1,5 +1,6 @@
 #include <QVBoxLayout>
 #include <QSqlQuery>
+#include <QInputDialog>
 #include <QSqlError>
 #include <QDebug>
 
@@ -14,7 +15,7 @@ TeacherGradeWindow::~TeacherGradeWindow() {
     delete tableView;
     delete deptBox;
     delete teacherBox;
-    delete commitButton;
+    delete addButton;
 }
 
 void TeacherGradeWindow::setupUI() {
@@ -83,12 +84,18 @@ void TeacherGradeWindow::setupUI() {
         }
         showGrades();
     });
+
+    // 创建“设置成绩”按钮
+    addButton = new QPushButton("设置成绩", this);
+    layout->addWidget(addButton);
+
+    connect(addButton, &QPushButton::clicked, this, &TeacherGradeWindow::addGrade);
 }
 
 void TeacherGradeWindow::showGrades() const {
     QSqlQuery query;
-    query.prepare("SELECT student_id AS 学号, courses.name AS 课程, IFNULL(score, '暂无') AS 分数, "
-                  "credit AS 学分, department AS 部门, teachers.name AS 教师 FROM grades "
+    query.prepare("SELECT student_id AS 学号, courses.course_id AS 课程号, courses.name AS 课程, "
+                  "IFNULL(score, '暂无') AS 分数, credit AS 学分 FROM grades "
                   "INNER JOIN courses ON courses.course_id = grades.course_id "
                   "INNER JOIN teachers ON teachers.teacher_id = courses.teacher_id "
                   "WHERE teachers.teacher_id = :teacher_id");
@@ -102,11 +109,27 @@ void TeacherGradeWindow::showGrades() const {
     model->setQuery(query);
 }
 
-void TeacherGradeWindow::showAverageAndRate() const {
-    ;
-}
+void TeacherGradeWindow::addGrade() {
+    const int courseId = QInputDialog::getInt(this, "添加成绩", "输入课程号:");
+    if (courseId <= 0) return;
 
-void TeacherGradeWindow::commitGrades() {
-    ;
+    const int studentId = QInputDialog::getInt(this, "添加成绩", "输入学号:");
+    if (studentId <= 0) return;
+
+    const double score = QInputDialog::getDouble(this, "添加成绩", "输入成绩:");
+    if (score < 0 || score > 100) return;
+
+    QSqlQuery query;
+    query.prepare("UPDATE grades SET score = :score "
+              "WHERE student_id = :student_id AND course_id = :course_id");
+    query.bindValue(":student_id", studentId);
+    query.bindValue(":course_id", courseId);
+    query.bindValue(":score", score);
+
+    if (!query.exec()) {
+        qDebug() << "Add course failed: " << query.lastError().text();
+    } else {
+        showGrades();
+    }
 }
 

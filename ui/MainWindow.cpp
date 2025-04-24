@@ -16,26 +16,26 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     resize(800, 600);
 
     // 中心窗口
-    const auto centralWidget = QScopedPointer(new QWidget(this));
-    setCentralWidget(centralWidget.get());
+    const auto centralWidget = new QWidget(this);
+    setCentralWidget(centralWidget);
 
     // 创建左侧树形菜单
     treeWidget = new QTreeWidget(this);
     treeWidget->setHeaderLabel("功能列表");
 
     // 添加分级菜单项
-    const auto item1 = QScopedPointer(new QTreeWidgetItem(treeWidget, QStringList("管理员界面")));
-    auto subItem1 = QScopedPointer(new QTreeWidgetItem(item1.get(), QStringList("学生信息管理")));
-    auto subItem2 = QScopedPointer(new QTreeWidgetItem(item1.get(), QStringList("教师信息管理")));
-    auto subItem3 = QScopedPointer(new QTreeWidgetItem(item1.get(), QStringList("课程信息管理")));
+    const auto item1 = new QTreeWidgetItem(treeWidget, QStringList("管理员界面"));
+    auto subItem1 = new QTreeWidgetItem(item1, QStringList("学生信息管理"));
+    auto subItem2 = new QTreeWidgetItem(item1, QStringList("教师信息管理"));
+    auto subItem3 = new QTreeWidgetItem(item1, QStringList("课程信息管理"));
 
-    const auto item2 = QScopedPointer(new QTreeWidgetItem(treeWidget, QStringList("学生界面")));
-    auto subItem4 = QScopedPointer(new QTreeWidgetItem(item2.get(), QStringList("选择课程")));
-    auto subItem5 = QScopedPointer(new QTreeWidgetItem(item2.get(), QStringList("查看成绩")));
+    const auto item2 = new QTreeWidgetItem(treeWidget, QStringList("学生界面"));
+    auto subItem4 = new QTreeWidgetItem(item2, QStringList("选择课程"));
+    auto subItem5 = new QTreeWidgetItem(item2, QStringList("查看成绩"));
 
-    const auto item3 = QScopedPointer(new QTreeWidgetItem(treeWidget, QStringList("教师界面")));
-    auto subItem6 = QScopedPointer(new QTreeWidgetItem(item3.get(), QStringList("查看课程")));
-    auto subItem7 = QScopedPointer(new QTreeWidgetItem(item3.get(), QStringList("管理成绩")));
+    const auto item3 = new QTreeWidgetItem(treeWidget, QStringList("教师界面"));
+    auto subItem6 = new QTreeWidgetItem(item3, QStringList("查看课程"));
+    auto subItem7 = new QTreeWidgetItem(item3, QStringList("管理成绩"));
 
     treeWidget->expandAll(); // 展开所有分类
 
@@ -51,10 +51,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     stackedWidget->addWidget(new TeacherGradeWindow(this)); // 6
 
     // 布局
-    const auto layout = QScopedPointer(new QHBoxLayout);
+    const auto layout = new QHBoxLayout;
     layout->addWidget(treeWidget, 1);  // 左侧占比 1
     layout->addWidget(stackedWidget, 3); // 右侧占比 3
-    centralWidget->setLayout(layout.get());
+    centralWidget->setLayout(layout);
 
     // 绑定点击信号
     connect(treeWidget, &QTreeWidget::itemClicked, this, &MainWindow::onItemClicked);
