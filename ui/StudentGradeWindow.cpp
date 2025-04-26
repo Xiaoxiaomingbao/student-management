@@ -53,11 +53,9 @@ void StudentGradeWindow::setupUI() {
 
     avgLineEdit = new QLineEdit(this);
     avgLineEdit->setReadOnly(true);
-    avgLineEdit->setPlaceholderText("算数平均分");
 
     weightedAvgLineEdit = new QLineEdit(this);
     weightedAvgLineEdit->setReadOnly(true);
-    weightedAvgLineEdit->setPlaceholderText("加权平均分");
 
     mainLayout->addWidget(classBox);
     mainLayout->addWidget(studentBox);
@@ -72,7 +70,7 @@ void StudentGradeWindow::setupUI() {
         for (const auto &pair : classStudent[className]) {
             studentBox->addItem(pair.second);
         }
-        showGrades();
+        // 这会触发 studentBox 的 connect 函数
     });
 
     // 初始界面展示表格
@@ -80,6 +78,7 @@ void StudentGradeWindow::setupUI() {
         if (pair.second == studentBox->currentText()) {
             currentStudentId = pair.first;
             showGrades();
+            showAverage();
             break;
         }
     }
@@ -92,9 +91,9 @@ void StudentGradeWindow::setupUI() {
             }
         }
         showGrades();
+        showAverage();
     });
 
-    showAverage();
 }
 
 void StudentGradeWindow::showGrades() const {
@@ -130,7 +129,12 @@ void StudentGradeWindow::showAverage() const {
         const QVariant avg = query.value(0);
         const QVariant weightedAvg = query.value(1);
 
-        avgLineEdit->setText(avg.isNull() ? "暂无" : QString::number(avg.toDouble(), 'f', 2));
-        weightedAvgLineEdit->setText(weightedAvg.isNull() ? "暂无" : QString::number(weightedAvg.toDouble(), 'f', 2));
+        avgLineEdit->setText(avg.isNull() ? "算数平均分 暂无" : "算数平均分 " + QString::number(avg.toDouble(), 'f', 2));
+        weightedAvgLineEdit->setText(weightedAvg.isNull() ? "加权平均分 暂无" : "加权平均分 " + QString::number(weightedAvg.toDouble(), 'f', 2));
     }
+}
+
+void StudentGradeWindow::refresh() const {
+    showGrades();
+    showAverage();
 }

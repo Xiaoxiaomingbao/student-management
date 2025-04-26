@@ -131,5 +131,11 @@ void TeacherGradeWindow::addGrade() {
     } else {
         showGrades();
     }
+
+    emit databaseChanged();
+}
+
+void TeacherGradeWindow::refresh() const {
+    showGrades();
 }
 

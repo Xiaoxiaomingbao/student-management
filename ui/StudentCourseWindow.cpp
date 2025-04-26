@@ -148,6 +148,8 @@ void StudentCourseWindow::addSelection(){
     } else {
         showSelections();
     }
+
+    emit databaseChanged();
 }
 
 void StudentCourseWindow::deleteSelection(){
@@ -164,4 +166,6 @@ void StudentCourseWindow::deleteSelection(){
     } else {
         showSelections();
     }
+
+    emit databaseChanged();
 }

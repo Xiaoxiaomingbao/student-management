@@ -28,10 +28,13 @@ private:
 
     void setupUI();
 
-    private slots:
-        void showSelections() const;
-        void addSelection();
-        void deleteSelection();
+signals:
+    void databaseChanged();
+
+private slots:
+    void showSelections() const;
+    void addSelection();
+    void deleteSelection();
 };
 
 

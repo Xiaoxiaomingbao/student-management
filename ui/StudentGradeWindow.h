@@ -13,6 +13,8 @@ public:
 
     ~StudentGradeWindow() override;
 
+    void refresh() const;
+
 private:
     QSqlQueryModel *model{};
     QTableView *tableView{};

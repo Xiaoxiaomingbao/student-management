@@ -5,10 +5,7 @@
 #include "ManagerCourseWindow.h"
 #include "ManagerStudentWindow.h"
 #include "ManagerTeacherWindow.h"
-#include "StudentCourseWindow.h"
-#include "StudentGradeWindow.h"
 #include "TeacherCourseWindow.h"
-#include "TeacherGradeWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     // 设置主窗口
@@ -45,10 +42,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     stackedWidget->addWidget(new ManagerStudentWindow(this)); // 0
     stackedWidget->addWidget(new ManagerTeacherWindow(this)); // 1
     stackedWidget->addWidget(new ManagerCourseWindow(this)); // 2
-    stackedWidget->addWidget(new StudentCourseWindow(this)); // 3
-    stackedWidget->addWidget(new StudentGradeWindow(this)); // 4
+
+    scw = new StudentCourseWindow(this);
+    sgw = new StudentGradeWindow(this);
+    tgw = new TeacherGradeWindow(this);
+
+    stackedWidget->addWidget(scw); // 3
+    stackedWidget->addWidget(sgw); // 4
+
     stackedWidget->addWidget(new TeacherCourseWindow(this)); // 5
-    stackedWidget->addWidget(new TeacherGradeWindow(this)); // 6
+
+    stackedWidget->addWidget(tgw); // 6
 
     // 布局
     const auto layout = new QHBoxLayout;
@@ -58,11 +62,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     // 绑定点击信号
     connect(treeWidget, &QTreeWidget::itemClicked, this, &MainWindow::onItemClicked);
+
+    sgwNeedRefresh = false;
+    tgwNeedRefresh = false;
+
+    // 学生选择课程影响学生成绩界面和教师成绩界面
+    connect(scw, &StudentCourseWindow::databaseChanged, this, [=]() {
+        sgwNeedRefresh = true;
+        tgwNeedRefresh = true;
+    });
+
+    // 教师设置成绩影响学生成绩界面
+    connect(tgw, &TeacherGradeWindow::databaseChanged, this, [=]() {
+        sgwNeedRefresh = true;
+    });
 }
 
 MainWindow::~MainWindow() {}
 
-void MainWindow::onItemClicked(const QTreeWidgetItem *item, const int column) const {
+void MainWindow::onItemClicked(const QTreeWidgetItem *item, const int column) {
     // 获取选中的文本
     if (const QString text = item->text(column); text == "学生信息管理") {
         stackedWidget->setCurrentIndex(0);
@@ -74,9 +92,17 @@ void MainWindow::onItemClicked(const QTreeWidgetItem *item, const int column) co
         stackedWidget->setCurrentIndex(3);
     } else if (text == "查看成绩") {
         stackedWidget->setCurrentIndex(4);
+        if (sgwNeedRefresh) {
+            sgw->refresh();
+            sgwNeedRefresh = false;
+        }
     } else if (text == "查看课程") {
         stackedWidget->setCurrentIndex(5);
     } else if (text == "管理成绩") {
         stackedWidget->setCurrentIndex(6);
+        if (tgwNeedRefresh) {
+            tgw->refresh();
+            tgwNeedRefresh = false;
+        }
     }
 }

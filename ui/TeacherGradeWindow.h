@@ -14,6 +14,8 @@ public:
 
     ~TeacherGradeWindow() override;
 
+    void refresh() const;
+
 private:
     QSqlQueryModel *model{};
     QTableView *tableView{};
@@ -26,6 +28,9 @@ private:
     int currentTeacherId;
 
     void setupUI();
+
+signals:
+    void databaseChanged();
 
 private slots:
     void showGrades() const;
